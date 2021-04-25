@@ -27,7 +27,7 @@ export const Tasks = ({ tasks, index, deleteTask, editTask }) => {
     <div>
       <Card style={cardStyle}>
         <p style={desStyle}><b style={btagStyle}>Description:</b> {tasks.description}</p>
-        <p style={desStyle}><b style={btagStyle}>End Date:</b> {moment(tasks.date).format("DD-MM-YYYY")}</p>
+        <p style={desStyle}><b style={btagStyle}>End Date:</b> {`${moment(tasks.date).format("DD-MM-YYYY")} ${moment(tasks.time).format("h:mm:ss a")}`}</p>
         <p style={desStyle}><b style={btagStyle}>Assigned To:</b> {tasks.assigto}</p>
         <Tooltip title={"Edit Task"}>
           <Button

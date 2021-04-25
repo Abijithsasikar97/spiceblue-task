@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button, DatePicker } from "antd";
+import { Form, Input, Button, DatePicker, TimePicker, Row, Col } from "antd";
 import moment from "moment";
 import { connect } from "react-redux";
 import { addTask, addObject, editedTask } from "../redux/action/addTask";
@@ -12,6 +12,7 @@ export class AddTaskForm extends Component {
     let data = {
       description: e.description,
       date: e.date,
+      time: e.time,
       assigto: e.Assigto,
     };
     this.props.addObject(data);
@@ -25,28 +26,30 @@ export class AddTaskForm extends Component {
     formFeilds.reset();
   };
 
-  onDateChange = (date, dateString) => {
-    console.log(date, dateString);
-  };
+//   onDateChange = (date, dateString) => {
+//     console.log(date, dateString);
+//   };
 
   componentDidUpdate() {
     if (this.props.value.description != undefined && this.formRef != null) {
       this.formRef.current.setFieldsValue({
         description: this.props.value.description,
         date: moment(this.props.value.date),
+        time: moment(this.props.value.time),
         Assigto: this.props.value.assigto,
       });
     }
   }
 
   render() {
-    const { description, date, assigto } = this.props.value;
+    const { description, date, assigto, time } = this.props.value;
 
     return (
       <Form
+        style={{ bottom: "20px" }}
         ref={this.formRef}
         id="addtask-form"
-        layout="inline"
+        layout="vertical"
         name="taskform"
         onFinish={this.handleSaveSubmit}
       >
@@ -54,19 +57,29 @@ export class AddTaskForm extends Component {
           label="Description"
           name="description"
           rules={[{ required: true, message: "Please Add description" }]}
-          initialValue={description}
         >
           <Input type="text" value={description} />
         </Form.Item>
-
-        <Form.Item
-          label="Date"
-          name="date"
-          rules={[{ required: true, message: "Please select date!" }]}
-        >
-          <DatePicker value={date} onChange={this.onDateChange} />
-        </Form.Item>
-
+        <Row gutter={8}>
+          <Col span={12}>
+            <Form.Item
+              label="Date"
+              name="date"
+              rules={[{ required: true, message: "Please select date!" }]}
+            >
+              <DatePicker value={date} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Time"
+              name="time"
+              rules={[{ required: true, message: "Please select time!" }]}
+            >
+              <TimePicker value={time} />
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item
           label="Assignee"
           name="Assigto"
@@ -77,7 +90,7 @@ export class AddTaskForm extends Component {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            {description !== undefined ? "Update" : "Save"}
           </Button>
         </Form.Item>
       </Form>

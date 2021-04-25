@@ -38,11 +38,38 @@
 }
 
 .container {
-  top: 50px;
-  padding: 30px;
+  align-items: center;
+  background: #ccc;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.subcontainer {
+  background: #fff;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  position: relative;
+  top: 10%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  width: 50%;
+  font-family: "Times New Roman", Times, serif;
 }
 
 h1 {
   font-weight: bold;
 }
-
