@@ -16,6 +16,7 @@ export class AddTaskForm extends Component {
       assigto: e.Assigto,
     };
     this.props.addObject(data);
+    // alert(this.props.selected);
     if (this.props.selected || this.props.selected === 0)
       this.props.editedTask({
         value: this.props.value,
@@ -43,7 +44,6 @@ export class AddTaskForm extends Component {
 
   render() {
     const { description, date, assigto, time } = this.props.value;
-
     return (
       <Form
         style={{ bottom: "20px" }}
@@ -90,7 +90,7 @@ export class AddTaskForm extends Component {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {description !== undefined ? "Update" : "Save"}
+            {this.props.selected === 0 ? "Update" : "Save"}
           </Button>
         </Form.Item>
       </Form>
