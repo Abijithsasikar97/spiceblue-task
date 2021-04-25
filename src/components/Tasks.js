@@ -3,6 +3,7 @@ import { Card, Button, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { deleteTask, editTask } from "../redux/action/addTask";
+import moment from 'moment';
 
 export const Tasks = ({ tasks, index, deleteTask, editTask }) => {
   const cardStyle = {
@@ -26,7 +27,7 @@ export const Tasks = ({ tasks, index, deleteTask, editTask }) => {
     <div>
       <Card style={cardStyle}>
         <p style={desStyle}><b style={btagStyle}>Description:</b> {tasks.description}</p>
-        <p style={desStyle}><b style={btagStyle}>End Date:</b> {tasks.date}</p>
+        <p style={desStyle}><b style={btagStyle}>End Date:</b> {moment(tasks.date).format("DD-MM-YYYY")}</p>
         <p style={desStyle}><b style={btagStyle}>Assigned To:</b> {tasks.assigto}</p>
         <Tooltip title={"Edit Task"}>
           <Button

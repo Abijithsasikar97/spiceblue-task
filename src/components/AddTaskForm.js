@@ -2,43 +2,61 @@ import React, { Component } from "react";
 import { Form, Input, Button, DatePicker } from "antd";
 import moment from "moment";
 import { connect } from "react-redux";
-import { addTask, addObject } from "../redux/action/addTask";
-
+import { addTask, addObject, editedTask } from "../redux/action/addTask";
 
 export class AddTaskForm extends Component {
-    formRef = React.createRef();
+  formRef = React.createRef();
 
-    handleSaveSubmit = (e) => {
-        // alert(JSON.stringify(e.description))
-        let data = {
-            description: e.description,
-            date: moment(e.date).format("DD-MM-YYYY"),
-            assigto: e.Assigto
-        }
-        this.props.addObject(data)
-        this.props.addTask(this.props.value);
-        this.formRef.current.resetFields();
-    }
+  handleSaveSubmit = (e) => {
+    // alert(JSON.stringify(e.description))
+    let data = {
+      description: e.description,
+      date: e.date,
+      assigto: e.Assigto,
+    };
+    this.props.addObject(data);
+    if (this.props.selected || this.props.selected === 0)
+      this.props.editedTask({
+        value: this.props.value,
+        selected: this.props.selected,
+      });
+    else this.props.addTask(this.props.value);
+    let formFeilds = document.getElementById("addtask-form");
+    formFeilds.reset();
+  };
 
-    onDateChange = (date, dateString) => {
-        console.log(date, dateString);
+  onDateChange = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
+  componentDidUpdate() {
+    if (this.props.value.description != undefined && this.formRef != null) {
+      this.formRef.current.setFieldsValue({
+        description: this.props.value.description,
+        date: moment(this.props.value.date),
+        Assigto: this.props.value.assigto,
+      });
     }
+  }
 
   render() {
-    const {description, date, assigto} = this.props.value;
+    const { description, date, assigto } = this.props.value;
+
     return (
       <Form
+        ref={this.formRef}
+        id="addtask-form"
         layout="inline"
         name="taskform"
-        initialValues={this.props.value}
         onFinish={this.handleSaveSubmit}
       >
         <Form.Item
           label="Description"
           name="description"
           rules={[{ required: true, message: "Please Add description" }]}
+          initialValue={description}
         >
-          <Input value={description} />
+          <Input type="text" value={description} />
         </Form.Item>
 
         <Form.Item
@@ -57,7 +75,7 @@ export class AddTaskForm extends Component {
           <Input value={assigto} />
         </Form.Item>
 
-        <Form.Item >
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
@@ -67,13 +85,15 @@ export class AddTaskForm extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-    addTask : task => dispatch(addTask(task)),
-    addObject : value => dispatch(addObject(value))
+const mapDispatchToProps = (dispatch) => ({
+  addTask: (task) => dispatch(addTask(task)),
+  addObject: (value) => dispatch(addObject(value)),
+  editedTask: (valueObj) => dispatch(editedTask(valueObj)),
 });
 
-const mapStateToProps = state => ({
-    value:state.value
-})
+const mapStateToProps = (state) => ({
+  value: state.value,
+  selected: state.selected,
+});
 
-export default connect(mapStateToProps,mapDispatchToProps)(AddTaskForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddTaskForm);
