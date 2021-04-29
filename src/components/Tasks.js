@@ -10,6 +10,7 @@ export const Tasks = ({ tasks, index, deleteTask, editTask }) => {
     border: "1px solid black",
     display: "flex",
     flexDirection: "row",
+    marginTop: '20px'
   };
 
   const desStyle = {

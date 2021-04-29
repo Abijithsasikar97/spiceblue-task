@@ -15,3 +15,5 @@ code {
 .ant-picker {
   width: 100%;
 }
+
+.ant-input-suffix {float: left;}

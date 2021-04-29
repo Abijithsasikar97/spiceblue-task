@@ -1,11 +1,25 @@
 import React, { Component } from "react";
-import { Form, Input, Button, DatePicker, TimePicker, Row, Col } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  TimePicker,
+  Row,
+  Col,
+  Card,
+} from "antd";
 import moment from "moment";
 import { connect } from "react-redux";
 import { addTask, addObject, editedTask } from "../redux/action/addTask";
+import { ProfileOutlined, PlusOutlined } from "@ant-design/icons";
 
 export class AddTaskForm extends Component {
   formRef = React.createRef();
+
+  state = {
+    showUpdate: true,
+  };
 
   handleSaveSubmit = (e) => {
     // alert(JSON.stringify(e.description))
@@ -27,9 +41,24 @@ export class AddTaskForm extends Component {
     formFeilds.reset();
   };
 
-//   onDateChange = (date, dateString) => {
-//     console.log(date, dateString);
-//   };
+  clearField = () => {
+    let formFeilds = document.getElementById("addtask-form");
+    formFeilds.reset();
+    this.setState({
+      showUpdate: false,
+    });
+    formFeilds.style = 'display: none;'
+  };
+
+  showForm = () => {
+    let showhideForm = document.getElementById("addtask-form");
+    showhideForm.style = "display: block;";
+  };
+
+  componentDidMount() {
+    let showhideForm = document.getElementById("addtask-form");
+    showhideForm.style = "display: none;";
+  }
 
   componentDidUpdate() {
     if (this.props.value.description != undefined && this.formRef != null) {
@@ -44,56 +73,85 @@ export class AddTaskForm extends Component {
 
   render() {
     const { description, date, assigto, time } = this.props.value;
+    const { showUpdate } = this.state;
     return (
-      <Form
-        style={{ bottom: "20px" }}
-        ref={this.formRef}
-        id="addtask-form"
-        layout="vertical"
-        name="taskform"
-        onFinish={this.handleSaveSubmit}
+      <Card
+        style={{ backgroundColor: "aliceblue" }}
+        title={`Tasks ${this.props.task.length}`}
+        extra={<PlusOutlined onClick={this.showForm} />}
       >
-        <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true, message: "Please Add description" }]}
+        <Form
+          style={{ bottom: "20px" }}
+          ref={this.formRef}
+          id="addtask-form"
+          layout="vertical"
+          name="taskform"
+          onFinish={this.handleSaveSubmit}
         >
-          <Input type="text" value={description} />
-        </Form.Item>
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              label="Date"
-              name="date"
-              rules={[{ required: true, message: "Please select date!" }]}
-            >
-              <DatePicker value={date} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Time"
-              name="time"
-              rules={[{ required: true, message: "Please select time!" }]}
-            >
-              <TimePicker value={time} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item
-          label="Assignee"
-          name="Assigto"
-          rules={[{ required: true, message: "Please Add Assignee" }]}
-        >
-          <Input value={assigto} />
-        </Form.Item>
+          <Form.Item
+            label="Task Description"
+            name="description"
+            rules={[{ required: true, message: "Please Add description" }]}
+            style={{marginTop: '10px'}}
+          >
+            <Input
+              suffix={<ProfileOutlined />}
+              type="text"
+              value={description}
+            />
+          </Form.Item>
+          <Row gutter={8}>
+            <Col span={12}>
+              <Form.Item
+                label="Date"
+                name="date"
+                rules={[{ required: true, message: "Please select date!" }]}
+              >
+                <DatePicker value={date} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Time"
+                name="time"
+                rules={[{ required: true, message: "Please select time!" }]}
+              >
+                <TimePicker use12Hours format="h:mm a" value={time} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item
+            label="Assign User"
+            name="Assigto"
+            rules={[{ required: true, message: "Please Add Assignee" }]}
+          >
+            <Input value={assigto} />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            {this.props.selected || this.props.selected === 0 ? "Update" : "Save"}
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item>
+            <Button
+              style={{ float: "right", backgroundColor: "green" }}
+              type="primary"
+              htmlType="submit"
+            >
+              {(this.props.selected || this.props.selected === 0) && showUpdate
+                ? "Update"
+                : "Save"}
+            </Button>
+            {this.props.selected === undefined ? (
+              <Button
+                onClick={this.clearField}
+                style={{ float: "right", marginRight: "20px" }}
+                type="text"
+              >
+                Cancel
+              </Button>
+            ) : (
+              ""
+            )}
+          </Form.Item>
+        </Form>
+      </Card>
     );
   }
 }
@@ -107,6 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
   value: state.value,
   selected: state.selected,
+  task: state.task,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTaskForm);

@@ -66,8 +66,20 @@
   bottom: 10%;
   left: 0;
   right: 0;
-  width: 50%;
+  width: 35%;
   font-family: "Times New Roman", Times, serif;
+}
+
+.subcontainer .ant-card-body {
+  padding: 0 20px 0 20px;
+}
+
+.subcontainer .ant-card-head-title {
+  margin-left: -90%;
+}
+
+.subcontainer .ant-card-head {
+  background-color: #fff;
 }
 
 h1 {
